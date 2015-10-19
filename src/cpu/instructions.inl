@@ -195,11 +195,11 @@ INS(stswi, (), (rS, rA, nb), (), (opcd == 31, xo1 == 725, !_31), (), USER, "Stor
 INS(stswx, (), (rS, rA, rB), (), (opcd == 31, xo1 == 661, !_31), (), USER, "Store String Word Indexed", (), ())
 
 // Memory Synchronisation
-INS(eieio, (), (), (), (opcd == 31, xo1 == 854, !_6_10, !_11_15, !_16_20, !_31), (), USER, "EnfoRce In-Order Execution of I/O", (), ())
-INS(isync, (), (), (), (opcd == 19, xo1 == 150, !_6_10, !_11_15, !_16_20, !_31), (), USER, "Instruction Synchronise", (), ())
-INS(lwarx, (rD), (rA, rB), (), (opcd == 31, xo1 == 20, !_31), (), USER, "Load Word and Reserve Indexed", (), ())
-INS(stwcx, (), (rS, rA, rB), (), (opcd == 31, xo1 == 150, _31), (), USER, "Store Word Conditional Indexed", (), ())
-INS(sync, (), (), (), (opcd == 31, xo1 == 598, !_6_10, !_11_15, !_16_20, !_31), (), USER, "Synchronise", (), ())
+INS(eieio, (), (), (), (opcd == 31, xo1 == 854, !_6_10, !_11_15, !_16_20, !_31), (), SPECIAL, "EnfoRce In-Order Execution of I/O", (), ())
+INS(isync, (), (), (), (opcd == 19, xo1 == 150, !_6_10, !_11_15, !_16_20, !_31), (), SPECIAL, "Instruction Synchronise", (), ())
+INS(lwarx, (rD), (rA, rB), (), (opcd == 31, xo1 == 20, !_31), (), SPECIAL, "Load Word and Reserve Indexed", (), ())
+INS(stwcx, (), (rS, rA, rB), (), (opcd == 31, xo1 == 150, _31), (), SPECIAL, "Store Word Conditional Indexed", (), ())
+INS(sync, (), (), (), (opcd == 31, xo1 == 598, !_6_10, !_11_15, !_16_20, !_31), (), SPECIAL, "Synchronise", (), ())
 
 // Floating-Point Load
 INS(lfd, (frD), (rA, d), (), (opcd == 50), (), USER, "Load Floating-Point Double", (), ())
@@ -229,10 +229,10 @@ INS(fnabs, (frD), (frB), (Rc), (opcd == 63, xo1 == 136, !_11_15), (), USER, "Flo
 INS(fneg, (frD), (frB), (Rc), (opcd == 63, xo1 == 40, !_11_15), (), USER, "Floating Negate", (), ())
 
 // Branch
-INS(b, (), (li), (aa, lk), (opcd == 18), (), USER, "Branch", (), ())
-INS(bc, (bo), (bi, bd), (aa, lk), (opcd == 16), (), USER, "Branch Conditional", (), ())
-INS(bcctr, (bo), (bi), (lk), (opcd == 19, xo1 == 528, !_16_20), (), USER, "Branch Conditional to CTR", (), ())
-INS(bclr, (bo), (bi), (lk), (opcd == 19, xo1 == 16, !_16_20), (), USER, "Branch Conditional to LR", (), ())
+INS(b, (), (li), (aa, lk), (opcd == 18), (), BRANCH, "Branch", (), ())
+INS(bc, (bo), (bi, bd), (aa, lk), (opcd == 16), (), BRANCH, "Branch Conditional", (), ())
+INS(bcctr, (bo), (bi), (lk), (opcd == 19, xo1 == 528, !_16_20), (), BRANCH, "Branch Conditional to CTR", (), ())
+INS(bclr, (bo), (bi), (lk), (opcd == 19, xo1 == 16, !_16_20), (), BRANCH, "Branch Conditional to LR", (), ())
 
 // Condition Register Logical
 INS(crand, (crbD), (crbA, crbB), (), (opcd == 19, xo1 == 257, !_31), (), USER, "Condition Register AND", (), ())
@@ -246,13 +246,17 @@ INS(crxor, (crbD), (crbA, crbB), (), (opcd == 19, xo1 == 193, !_31), (), USER, "
 INS(mcrf, (crfD), (crfS), (), (opcd == 19, xo1 == 0, !_9_10, !_14_15, !_16_20, !_31), (), USER, "Move Condition Register Field", (), ())
 
 // System Linkage
-INS(rfi, (), (), (), (opcd == 19, xo1 == 50, !_6_10, !_11_15, !_16_20, !_31), (), USER, "", (), ())
-INS(sc, (), (), (), (opcd == 17, !_6_10, !_11_15, !_16_29, _30, !_31), (), USER, "Syscall", (), ())
-INS(kc, (), (kcn), (), (opcd == 1), (), USER, "krncall", (), ())
+INS(rfi, (), (), (), (opcd == 19, xo1 == 50, !_6_10, !_11_15, !_16_20, !_31), (), SUPER, "", (), ())
+INS(sc, (), (), (), (opcd == 17, !_6_10, !_11_15, !_16_29, _30, !_31), (), SPECIAL, "Syscall", (), ())
+INS(kc, (), (kcn), (), (opcd == 1), (), SPECIAL, "krncall", (), ())
 
 // Trap
-INS(tw, (), (to, rA, rB), (), (opcd == 31, xo1 == 4, !_31), (), USER, "", (), ())
-INS(twi, (), (to, rA, simm), (), (opcd == 3), (), USER, "", (), ())
+INS(tw, (), (to, rA, rB), (), (opcd == 31, xo1 == 4, !_31), (), SPECIAL, "",
+   (),
+   (GPR[rA], GPR[rB]))
+INS(twi, (), (to, rA, simm), (), (opcd == 3), (), SPECIAL, "",
+   (),
+   (GPR[rA]))
 
 // Processor Control
 INS(mcrxr, (crfD), (), (), (opcd == 31, xo1 == 512, !_9_10, !_11_15, !_16_20, !_31), (), USER, "Move to Condition Register from XER",

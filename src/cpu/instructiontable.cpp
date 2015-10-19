@@ -944,19 +944,21 @@ InstructionBadOpcode operator==(const FieldIndex& field1, const FieldIndex& fiel
    return InstructionBadOpcode(field1, field2);
 }
 
-enum class InstructionMode {
+enum class InstructionType {
    User,
+   Branch,
+   Special,
    Super,
-   Special
 };
-const InstructionMode USER = InstructionMode::User;
-const InstructionMode SUPER = InstructionMode::Super;
-const InstructionMode SPECIAL = InstructionMode::Special;
+const InstructionType USER = InstructionType::User;
+const InstructionType BRANCH = InstructionType::Branch;
+const InstructionType SPECIAL = InstructionType::Special;
+const InstructionType SUPER = InstructionType::Super;
 
 struct InstructionDataBuilder
 {
    InstructionID id;
-   InstructionMode mode;
+   InstructionType mode;
    std::string name;
    std::string fullname;
    std::vector<InstructionOpcode> opcode;
