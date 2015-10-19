@@ -320,7 +320,7 @@ INS(psq_stux, (frS), (rA, rB), (qw, qi), (opcd == 4, xo3 == 39, !_31), (), USER,
 
 // Paired-Single Floating Point Arithmetic
 INS(ps_add, (frD), (frA, frB), (Rc), (opcd == 4, xo4 == 21, !_21_25), (), USER, "Paired Single Add",
-   (PSR0[rD], PSR1[rD], FPSCR[FPRF, FR, FI, FX, OX, UX, XX, VXSNAN, VXISI], Rc.on(CR[1][FX, FEX, VX, OX])),
+   (PSR[rD], FPSCR[FPRF, FR, FI, FX, OX, UX, XX, VXSNAN, VXISI], Rc.on(CR[1][FX, FEX, VX, OX])),
    (PSR[rA], PSR[rB], FPSCR[VE]))
 INS(ps_div, (frD), (frA, frB), (Rc), (opcd == 4, xo4 == 18, !_21_25), (), USER, "Paired Single Divide", (), ())
 INS(ps_mul, (frD), (frA, frC), (Rc), (opcd == 4, xo4 == 25, !_16_20), (), USER, "Paired Single Multiply", (), ())
