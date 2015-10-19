@@ -12,7 +12,9 @@ struct BitRange
 };
 
 #define FLD(x, ...) x,
-#define MRKR(x, ...) x,
+#define FLAGFLD(x, ...) x,
+#define OPFLD(x, ...) x,
+#define OPMASK(...)
 
 enum class Field : uint32_t
 {
@@ -22,7 +24,9 @@ enum class Field : uint32_t
 };
 
 #undef FLD
-#undef MRKR
+#undef FLAGFLD
+#undef OPFLD
+#undef OPMASK
 
 struct InstructionOpcode
 {
@@ -35,13 +39,7 @@ struct InstructionOpcode
    {
    }
 
-   InstructionOpcode(Field field, Field field2)
-      : field(field), field2(field2)
-   {
-   }
-
    Field field = Field::Invalid;
-   Field field2 = Field::Invalid;
    uint32_t value = 0;
 };
 

@@ -33,7 +33,7 @@ namespace jit
       a.mov(a.ppcfprps[instr.frD][0], a.zax);
       a.mov(a.ppcfprps[instr.frD][1], a.zcx);
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateFloatConditionRegister(a, a.zax, a.zcx);
       }
       return true;

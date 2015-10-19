@@ -20,9 +20,13 @@ union Instruction
       uint32_t x : (z-y+1); \
       uint32_t : (y); \
    };
-#define MRKR(...)
+#define FLAGFLD FLD
+#define OPFLD(...)
+#define OPMASK(...)
 #include "instructionfields.inl"
 #undef FLD
-#undef MRKR
+#undef FLAGFLD
+#undef OPFLD
+#undef OPMASK
 
 };

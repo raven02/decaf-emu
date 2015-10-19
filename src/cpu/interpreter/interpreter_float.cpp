@@ -114,7 +114,7 @@ fadd(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -143,7 +143,7 @@ fdiv(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -171,7 +171,7 @@ fmul(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -199,7 +199,7 @@ fsub(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -224,7 +224,7 @@ fres(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -245,7 +245,7 @@ frsqrte(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -266,7 +266,7 @@ fsel(ThreadState *state, Instruction instr)
 
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -289,7 +289,7 @@ fmadd(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -319,7 +319,7 @@ fmsub(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -349,7 +349,7 @@ fnmadd(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -379,7 +379,7 @@ fnmsub(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -429,7 +429,7 @@ fctiw(ThreadState *state, Instruction instr)
    updateFPSCR(state);
    state->fpr[instr.frD].iw0 = bi;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -459,7 +459,7 @@ fctiwz(ThreadState *state, Instruction instr)
    updateFPSCR(state);
    state->fpr[instr.frD].iw0 = bi;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -476,7 +476,7 @@ frsp(ThreadState *state, Instruction instr)
    updateFPRF(state, d);
    state->fpr[instr.frD].paired0 = static_cast<double>(d);
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -491,7 +491,7 @@ fabs(ThreadState *state, Instruction instr)
    d = std::fabs(b);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -506,7 +506,7 @@ fnabs(ThreadState *state, Instruction instr)
    d = -std::fabs(b);
    state->fpr[instr.frD].paired0 = d;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -517,7 +517,7 @@ fmr(ThreadState *state, Instruction instr)
 {
    state->fpr[instr.frD].paired0 = state->fpr[instr.frB].paired0;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -528,7 +528,7 @@ fneg(ThreadState *state, Instruction instr)
 {
    state->fpr[instr.frD].paired0 = -state->fpr[instr.frB].paired0;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }

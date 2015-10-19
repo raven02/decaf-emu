@@ -112,11 +112,11 @@ addGeneric(ThreadState *state, Instruction instr)
       updateOverflow(state, overflow);
       updateConditionRegister(state, d);
    } else if (flags & AddCheckRecord) {
-      if (instr.oe) {
+      if (instr.OE) {
          updateOverflow(state, overflow);
       }
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(state, d);
       }
    }
@@ -214,7 +214,7 @@ andGeneric(ThreadState *state, Instruction instr)
    if (flags & AndAlwaysRecord) {
       updateConditionRegister(state, a);
    } else if (flags & AndCheckRecord) {
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(state, a);
       }
    }
@@ -261,7 +261,7 @@ cntlzw(ThreadState *state, Instruction instr)
 
    state->gpr[instr.rA] = a;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, a);
    }
 }
@@ -290,11 +290,11 @@ divGeneric(ThreadState *state, Instruction instr)
       overflow = true;
    }
 
-   if (instr.oe) {
+   if (instr.OE) {
       updateOverflow(state, overflow);
    }
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, d);
    }
 }
@@ -323,7 +323,7 @@ eqv(ThreadState *state, Instruction instr)
    a = ~(s ^ b);
    state->gpr[instr.rA] = a;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, a);
    }
 }
@@ -339,7 +339,7 @@ extsb(ThreadState *state, Instruction instr)
    a = sign_extend<8>(s);
    state->gpr[instr.rA] = a;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, a);
    }
 }
@@ -355,7 +355,7 @@ extsh(ThreadState *state, Instruction instr)
    a = sign_extend<16>(s);
    state->gpr[instr.rA] = a;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, a);
    }
 }
@@ -393,7 +393,7 @@ mulSignedGeneric(ThreadState *state, Instruction instr)
    state->gpr[instr.rD] = d;
 
    if (flags & MulCheckRecord) {
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(state, d);
       }
    }
@@ -418,7 +418,7 @@ mulUnsignedGeneric(ThreadState *state, Instruction instr)
    state->gpr[instr.rD] = d;
 
    if (flags & MulCheckRecord) {
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(state, d);
       }
    }
@@ -460,7 +460,7 @@ nand(ThreadState *state, Instruction instr)
    a = ~(s & b);
    state->gpr[instr.rA] = a;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, a);
    }
 }
@@ -478,11 +478,11 @@ neg(ThreadState *state, Instruction instr)
 
    bool overflow = (a == 0x80000000);
 
-   if (instr.oe) {
+   if (instr.OE) {
       updateOverflow(state, overflow);
    }
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, d);
    }
 }
@@ -499,7 +499,7 @@ nor(ThreadState *state, Instruction instr)
    a = ~(s | b);
    state->gpr[instr.rA] = a;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, a);
    }
 }
@@ -542,7 +542,7 @@ orGeneric(ThreadState *state, Instruction instr)
    if (flags & OrAlwaysRecord) {
       updateConditionRegister(state, a);
    } else if (flags & OrCheckRecord) {
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(state, a);
       }
    }
@@ -606,7 +606,7 @@ rlwGeneric(ThreadState *state, Instruction instr)
 
    state->gpr[instr.rA] = a;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, a);
    }
 }
@@ -664,7 +664,7 @@ shiftLogical(ThreadState *state, Instruction instr)
 
    state->gpr[instr.rA] = a;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, a);
    }
 }
@@ -725,7 +725,7 @@ shiftArithmetic(ThreadState *state, Instruction instr)
 
    updateCarry(state, carry);
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateConditionRegister(state, a);
    }
 }
@@ -809,7 +809,7 @@ xorGeneric(ThreadState *state, Instruction instr)
    state->gpr[instr.rA] = a;
 
    if (flags & XorCheckRecord) {
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(state, a);
       }
    }

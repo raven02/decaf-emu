@@ -141,6 +141,7 @@ decodeSPR(Instruction instr)
    return static_cast<SprEncoding>(((instr.spr << 5) & 0x3E0) | ((instr.spr >> 5) & 0x1F));
 }
 
+/*
 static uint32_t
 getFieldStateField(Instruction instr, Field field)
 {
@@ -204,12 +205,12 @@ getFieldStateField(Instruction instr, Field field)
    case Field::crm:
       return StateField::CR;
    case Field::oe:
-      if (instr.oe) {
+      if (instr.OE) {
          return StateField::XER;
       }
       break;
    case Field::rc:
-      if (instr.rc) {
+      if (instr.Rc) {
          return StateField::CR;
       }
       break;
@@ -228,6 +229,7 @@ getFieldStateField(Instruction instr, Field field)
    }
    return StateField::Invalid;
 }
+*/
 
 void
 saveStateField(const ThreadState *state, TraceFieldType type, TraceFieldValue &field)
@@ -339,6 +341,7 @@ traceInstructionStart(Instruction instr, InstructionData *data, ThreadState *sta
    trace.writes.clear();
 
    // Automatically determine register changes
+   /*
    for (auto i = 0u; i < data->read.size(); ++i) {
       auto stateField = getFieldStateField(instr, data->read[i]);
       pushUniqueField(trace.reads, stateField);
@@ -368,6 +371,7 @@ traceInstructionStart(Instruction instr, InstructionData *data, ThreadState *sta
    } else if (data->id == InstructionID::stswx) {
       // TODO: Implement Me
    }
+   */
 
 #ifdef TRACE_VERIFICATION
    if (data->id == InstructionID::stswi) {

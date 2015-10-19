@@ -215,6 +215,7 @@ executeInstrTest(uint32_t test_seed)
 
    Instruction instr(fuzzData->baseInstr);
 
+   /*
    {
       // TODO: Add handling for rA==0 being 0 :S
       uint32_t gprAlloc = 0;
@@ -321,6 +322,7 @@ executeInstrTest(uint32_t test_seed)
          }
       }
    }
+   */
 
    // Write an instruction
    mem::write(instructionBase + 0, instr.value);

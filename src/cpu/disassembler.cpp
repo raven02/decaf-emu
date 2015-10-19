@@ -10,6 +10,7 @@ Disassembler gDisassembler;
 
 // TODO: Finish disassembler!
 
+/*
 static Disassembly::Argument
 disassembleField(uint32_t cia, Instruction instr, InstructionData *data, Field field)
 {
@@ -116,9 +117,9 @@ disassembleField(uint32_t cia, Instruction instr, InstructionData *data, Field f
       result.type = Disassembly::Argument::ConstantUnsigned;
       result.constantUnsigned = instr.nb;
       break;
-   case Field::oe:
+   case Field::OE:
       result.type = Disassembly::Argument::ConstantUnsigned;
-      result.constantUnsigned = instr.oe;
+      result.constantUnsigned = instr.OE;
       break;
    case Field::qd:
       result.type = Disassembly::Argument::ValueSigned;
@@ -132,9 +133,9 @@ disassembleField(uint32_t cia, Instruction instr, InstructionData *data, Field f
       result.type = Disassembly::Argument::Register;
       result.text = "r" + std::to_string(instr.rB);
       break;
-   case Field::rc:
+   case Field::Rc:
       result.type = Disassembly::Argument::ConstantUnsigned;
-      result.constantUnsigned = instr.rc;
+      result.constantUnsigned = instr.Rc;
       break;
    case Field::rD:
       result.type = Disassembly::Argument::Register;
@@ -220,10 +221,13 @@ argumentToText(Disassembly::Argument &arg)
 
    return std::string();
 }
+*/
 
 bool
 Disassembler::disassemble(Instruction instr, Disassembly &dis, uint32_t address)
 {
+   return false;
+   /*
    auto data = gInstructionTable.decode(instr);
 
    if (!data) {
@@ -284,8 +288,8 @@ Disassembler::disassemble(Instruction instr, Disassembly &dis, uint32_t address)
 
       if (field == Field::aa || 
          field == Field::lk || 
-         field == Field::oe || 
-         field == Field::rc) {
+         field == Field::OE || 
+         field == Field::Rc) {
          continue;
       }
 
@@ -297,9 +301,9 @@ Disassembler::disassemble(Instruction instr, Disassembly &dis, uint32_t address)
          dis.name += 'a';
       } else if (field == Field::lk && instr.lk) {
          dis.name += 'l';
-      } else if (field == Field::oe && instr.oe) {
+      } else if (field == Field::oe && instr.OE) {
          dis.name += 'o';
-      } else if (field == Field::rc && instr.rc) {
+      } else if (field == Field::rc && instr.Rc) {
          dis.name += '.';
       }
    }
@@ -331,4 +335,5 @@ Disassembler::disassemble(Instruction instr, Disassembly &dis, uint32_t address)
    }
 
    return true;
+   */
 }

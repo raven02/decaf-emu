@@ -17,7 +17,7 @@ ps_abs(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -50,7 +50,7 @@ ps_add(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -87,7 +87,7 @@ ps_div(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -153,7 +153,7 @@ maddGeneric(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -210,7 +210,7 @@ mergeGeneric(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -246,7 +246,7 @@ ps_mr(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = state->fpr[instr.frB].paired0;
    state->fpr[instr.frD].paired1 = state->fpr[instr.frB].paired1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -301,7 +301,7 @@ msubGeneric(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -364,7 +364,7 @@ mulGeneric(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -402,7 +402,7 @@ ps_nabs(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -422,7 +422,7 @@ ps_neg(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -450,7 +450,7 @@ ps_res(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -478,7 +478,7 @@ ps_rsqrte(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -504,7 +504,7 @@ ps_sel(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -537,7 +537,7 @@ ps_sub(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }
@@ -586,7 +586,7 @@ sumGeneric(ThreadState *state, Instruction instr)
    state->fpr[instr.frD].paired0 = d0;
    state->fpr[instr.frD].paired1 = d1;
 
-   if (instr.rc) {
+   if (instr.Rc) {
       updateFloatConditionRegister(state);
    }
 }

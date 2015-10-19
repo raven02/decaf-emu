@@ -77,10 +77,10 @@ namespace jit
          recordOverflow = true;
          recordCond = true;
       } else if (flags & AddCheckRecord) {
-         if (instr.oe) {
+         if (instr.OE) {
             recordOverflow = true;
          }
-         if (instr.rc) {
+         if (instr.Rc) {
             recordCond = true;
          }
       }
@@ -258,7 +258,7 @@ namespace jit
       if (flags & AndAlwaysRecord) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       } else if (flags & AndCheckRecord) {
-         if (instr.rc) {
+         if (instr.Rc) {
             updateConditionRegister(a, a.eax, a.ecx, a.edx);
          }
       }
@@ -311,7 +311,7 @@ namespace jit
       a.bind(lblZero);
       a.mov(a.ppcgpr[instr.rA], a.eax);
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       }
 
@@ -351,7 +351,7 @@ namespace jit
 
       a.mov(a.ppcgpr[instr.rA], a.eax);
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       }
 
@@ -368,7 +368,7 @@ namespace jit
 
       a.mov(a.ppcgpr[instr.rA], a.eax);
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       }
 
@@ -385,7 +385,7 @@ namespace jit
 
       a.mov(a.ppcgpr[instr.rA], a.eax);
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       }
 
@@ -420,7 +420,7 @@ namespace jit
          a.mov(a.ppcgpr[instr.rD], a.eax);
 
          if (flags & MulCheckRecord) {
-            if (instr.rc) {
+            if (instr.Rc) {
                updateConditionRegister(a, a.eax, a.ecx, a.edx);
             }
          }
@@ -428,7 +428,7 @@ namespace jit
          a.mov(a.ppcgpr[instr.rD], a.edx);
 
          if (flags & MulCheckRecord) {
-            if (instr.rc) {
+            if (instr.Rc) {
                updateConditionRegister(a, a.edx, a.ecx, a.eax);
             }
          }
@@ -458,7 +458,7 @@ namespace jit
          a.mov(a.ppcgpr[instr.rD], a.eax);
 
          if (flags & MulCheckRecord) {
-            if (instr.rc) {
+            if (instr.Rc) {
                updateConditionRegister(a, a.eax, a.ecx, a.edx);
             }
          }
@@ -466,7 +466,7 @@ namespace jit
          a.mov(a.ppcgpr[instr.rD], a.edx);
 
          if (flags & MulCheckRecord) {
-            if (instr.rc) {
+            if (instr.Rc) {
                updateConditionRegister(a, a.edx, a.ecx, a.eax);
             }
          }
@@ -513,7 +513,7 @@ namespace jit
 
       a.mov(a.ppcgpr[instr.rA], a.eax);
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       }
 
@@ -528,7 +528,7 @@ namespace jit
       a.neg(a.eax);
       a.mov(a.ppcgpr[instr.rD], a.eax);
 
-      if (instr.oe) {
+      if (instr.OE) {
          a.mov(a.ecx, 0);
          a.seto(a.ecx.r8());
 
@@ -544,7 +544,7 @@ namespace jit
          a.mov(a.ppcxer, a.edx);
       }
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       }
 
@@ -563,7 +563,7 @@ namespace jit
 
       a.mov(a.ppcgpr[instr.rA], a.eax);
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       }
 
@@ -606,7 +606,7 @@ namespace jit
       if (flags & OrAlwaysRecord) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       } else if (flags & OrCheckRecord) {
-         if (instr.rc) {
+         if (instr.Rc) {
             updateConditionRegister(a, a.eax, a.ecx, a.edx);
          }
       }
@@ -673,7 +673,7 @@ namespace jit
 
       a.mov(a.ppcgpr[instr.rA], a.eax);
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       }
 
@@ -737,7 +737,7 @@ namespace jit
 
       a.mov(a.ppcgpr[instr.rA], a.eax);
 
-      if (instr.rc) {
+      if (instr.Rc) {
          updateConditionRegister(a, a.eax, a.ecx, a.edx);
       }
 
@@ -851,7 +851,7 @@ namespace jit
       a.mov(a.ppcgpr[instr.rA], a.eax);
 
       if (flags & XorCheckRecord) {
-         if (instr.rc) {
+         if (instr.Rc) {
             updateConditionRegister(a, a.eax, a.ecx, a.edx);
          }
       }
