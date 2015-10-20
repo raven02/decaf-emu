@@ -24,10 +24,18 @@ INS(subfme, (rD), (rA), (OE, Rc), (opcd == 31, xo2 == 232, !_16_20), (), USER, "
 INS(subfze, (rD), (rA), (OE, Rc), (opcd == 31, xo2 == 200, !_16_20), (), USER, "Subtract From Zero Extended", (), ())
 
 // Integer Compare
-INS(cmp, (crfD), (rA, rB), (l), (opcd == 31, xo1 == 0, !_9, !_31), (), USER, "Compare", (), ())
-INS(cmpi, (crfD), (rA, simm), (l), (opcd == 11, !_9), (), USER, "Compare Immediate", (), ())
-INS(cmpl, (crfD), (rA, rB), (l), (opcd == 31, xo1 == 32, !_9, !_31), (), USER, "Compare Logical", (), ())
-INS(cmpli, (crfD), (rA, uimm), (l), (opcd == 10, !_9), (), USER, "Compare Logical Immediate", (), ())
+INS(cmp, (crfD), (rA, rB), (), (opcd == 31, xo1 == 0, !_9, !_31), (L == 1), USER, "Compare", 
+   (CR[crfD]), 
+   (GPR[rA], GPR[rB]))
+INS(cmpi, (crfD), (rA, simm), (), (opcd == 11, !_9), (L == 1), USER, "Compare Immediate",
+   (CR[crfD]), 
+   (GPR[rA]))
+INS(cmpl, (crfD), (rA, rB), (), (opcd == 31, xo1 == 32, !_9, !_31), (L == 1), USER, "Compare Logical",
+   (CR[crfD]),
+   (GPR[rA], GPR[rB]))
+INS(cmpli, (crfD), (rA, uimm), (), (opcd == 10, !_9), (L == 1), USER, "Compare Logical Immediate",
+   (CR[crfD]),
+   (GPR[rA]))
 
 // Integer Logical
 INS(and_, (rA), (rS, rB), (Rc), (opcd == 31, xo1 == 28), (), USER, "AND", (), ())
@@ -49,15 +57,29 @@ INS(xori, (rA), (rS, uimm), (), (opcd == 26), (), USER, "XOR Immediate", (), ())
 INS(xoris, (rA), (rS, uimm), (), (opcd == 27), (), USER, "XOR Immediate Shifted", (), ())
 
 // Integer Rotate
-INS(rlwimi, (rA), (rS, rA, sh, mb, me), (Rc), (opcd == 20), (), USER, "Rotate Left Word Immediate then Mask Insert", (), ())
-INS(rlwinm, (rA), (rS, sh, mb, me), (Rc), (opcd == 21), (), USER, "Rotate Left Word Immediate then AND with Mask", (), ())
-INS(rlwnm, (rA), (rS, rB, mb, me), (Rc), (opcd == 23), (), USER, "Rotate Left Word then AND with Mask", (), ())
+INS(rlwimi, (rA), (rS, rA, sh, mb, me), (Rc), (opcd == 20), (), USER, "Rotate Left Word Immediate then Mask Insert",
+   (GPR[rA], Rc.on(CR[0][LT,GT,EQ,SO])),
+   (GPR[rS], GPR[rA]))
+INS(rlwinm, (rA), (rS, sh, mb, me), (Rc), (opcd == 21), (), USER, "Rotate Left Word Immediate then AND with Mask", 
+   (GPR[rA], Rc.on(CR[0][LT,GT,EQ,SO])),
+   (GPR[rS]))
+INS(rlwnm, (rA), (rS, rB, mb, me), (Rc), (opcd == 23), (), USER, "Rotate Left Word then AND with Mask", 
+   (GPR[rA], Rc.on(CR[0][LT,GT,EQ,SO])),
+   (GPR[rS], GPR[rB]))
 
 // Integer Shift
-INS(slw, (rA), (rS, rB), (Rc), (opcd == 31, xo1 == 24), (), USER, "Shift Left Word", (), ())
-INS(sraw, (rA), (rS, rB), (Rc), (opcd == 31, xo1 == 792), (), USER, "Shift Right Arithmetic Word", (), ())
-INS(srawi, (rA), (rS, sh), (Rc), (opcd == 31, xo1 == 824), (), USER, "Shift Right Arithmetic Word Immediate", (), ())
-INS(srw, (rA), (rS, rB), (Rc), (opcd == 31, xo1 == 536), (), USER, "Shift Right Word", (), ())
+INS(slw, (rA), (rS, rB), (Rc), (opcd == 31, xo1 == 24), (), USER, "Shift Left Word", 
+   (GPR[rA], Rc.on(CR[0][LT,GT,EQ,SO])), 
+   (GPR[rS], GPR[rB]))
+INS(sraw, (rA), (rS, rB), (Rc), (opcd == 31, xo1 == 792), (), USER, "Shift Right Arithmetic Word",
+   (GPR[rA], XER[SO], Rc.on(CR[0][LT,GT,EQ,SO])), 
+   (GPR[rS], GPR[rB]))
+INS(srawi, (rA), (rS, sh), (Rc), (opcd == 31, xo1 == 824), (), USER, "Shift Right Arithmetic Word Immediate",
+   (GPR[rA], XER[SO], Rc.on(CR[0][LT,GT,EQ,SO])),
+   (GPR[rS]))
+INS(srw, (rA), (rS, rB), (Rc), (opcd == 31, xo1 == 536), (), USER, "Shift Right Word",
+   (GPR[rA], Rc.on(CR[0][LT,GT,EQ,SO])),
+   (GPR[rS], GPR[rB]))
 
 // Floating-Point Arithmetic
 INS(fadd, (frD), (frA, frB), (Rc), (opcd == 63, xo4 == 21, !_21_25), (), USER, "Floating Add", (), ())
@@ -117,52 +139,52 @@ INS(mtfsfi, (crfD), (), (Rc, imm), (opcd == 63, xo1 == 134, !_9_10, !_11_15, !_2
 // Integer Load
 INS(lbz, (rD), (rA, d), (), (opcd == 34), (), USER, "Load Byte and Zero",
    (GPR[rD]),
-   (MEM(GPRZ[rA] + EXTS(d), 1)))
+   (MEM(GPRZ[rA] + EXTS(d), 1, uint8_t)))
 INS(lbzu, (rD, rA), (rA, d), (), (opcd == 35), (), USER, "Load Byte and Zero with Update", 
    (GPR[rD], GPR[rA]),
-   (MEM(GPR[rA] + EXTS(d), 1)))
+   (MEM(GPR[rA] + EXTS(d), 1, uint8_t)))
 INS(lbzx, (rD), (rA, rB), (), (opcd == 31, xo1 == 87, !_31), (), USER, "Load Byte and Zero Indexed",
    (GPR[rD]),
-   (MEM(GPRZ[rA] + GPR[rB], 1)))
+   (MEM(GPRZ[rA] + GPR[rB], 1, uint8_t)))
 INS(lbzux, (rD, rA), (rA, rB), (), (opcd == 31, xo1 == 119, !_31), (rA == 0, rA == rD), USER, "Load Byte and Zero with Update Indexed",
    (GPR[rD], GPR[rA]),
-   (MEM(GPR[rA] + GPR[rB], 1)))
+   (MEM(GPR[rA] + GPR[rB], 1, uint8_t)))
 INS(lha, (rD), (rA, d), (), (opcd == 42), (), USER, "Load Half Word Algebraic", 
    (GPR[rD]), 
-   (MEM(GPRZ[rA] + EXTS(d), 2)))
+   (MEM(GPRZ[rA] + EXTS(d), 2, uint16_t)))
 INS(lhau, (rD, rA), (rA, d), (), (opcd == 43), (rA == 0, rA == rD), USER, "Load Half Word Algebraic with Update",
    (GPR[rD], GPR[rA]),
-   (MEM(GPR[rA] + EXTS(d), 2)))
+   (MEM(GPR[rA] + EXTS(d), 2, uint16_t)))
 INS(lhax, (rD), (rA, rB), (), (opcd == 31, xo1 == 343, !_31), (), USER, "Load Half Word Algebraic Indexed",
    (GPR[rD]),
-   (MEM(GPRZ[rA] + GPR[rB], 2)))
+   (MEM(GPRZ[rA] + GPR[rB], 2, uint16_t)))
 INS(lhaux, (rD, rA), (rA, rB), (), (opcd == 31, xo1 == 375, !_31), (rA == 0, rA == rD), USER, "Load Half Word Algebraic with Update Indexed",
    (GPR[rD], GPR[rA]),
-   (MEM(GPR[rA] + GPR[rB], 2)))
+   (MEM(GPR[rA] + GPR[rB], 2, uint16_t)))
 INS(lhz, (rD), (rA, d), (), (opcd == 40), (), USER, "Load Half Word and Zero",
    (GPR[rD]),
-   (MEM(GPRZ[rA] + EXTS(d), 2)))
+   (MEM(GPRZ[rA] + EXTS(d), 2, uint16_t)))
 INS(lhzu, (rD, rA), (rA, d), (), (opcd == 41), (rA == 0, rA == rD), USER, "Load Half Word and Zero with Update",
    (GPR[rD], GPR[rA]),
-   (MEM(GPR[rA] + EXTS(d), 2)))
+   (MEM(GPR[rA] + EXTS(d), 2, uint16_t)))
 INS(lhzx, (rD), (rA, rB), (), (opcd == 31, xo1 == 279, !_31), (), USER, "Load Half Word and Zero Indexed",
    (GPR[rD]),
-   (MEM(GPRZ[rA] + GPR[rB], 2)))
+   (MEM(GPRZ[rA] + GPR[rB], 2, uint16_t)))
 INS(lhzux, (rD, rA), (rA, rB), (), (opcd == 31, xo1 == 311, !_31), (rA == 0, rA == rD), USER, "Load Half Word and Zero with Update Indexed",
    (GPR[rD], GPR[rA]),
-   (MEM(GPR[rA] + GPR[rB], 2)))
+   (MEM(GPR[rA] + GPR[rB], 2, uint16_t)))
 INS(lwz, (rD), (rA, d), (), (opcd == 32), (), USER, "Load Word and Zero",
    (GPR[rD]),
-   (MEM(GPRZ[rA] + EXTS(d), 4)))
+   (MEM(GPRZ[rA] + EXTS(d), 4, uint32_t)))
 INS(lwzu, (rD, rA), (rA, d), (), (opcd == 33), (rA == 0, rA == rD), USER, "Load Word and Zero with Update",
    (GPR[rD], GPR[rA]),
-   (MEM(GPR[rA] + EXTS(d), 4)))
+   (MEM(GPR[rA] + EXTS(d), 4, uint32_t)))
 INS(lwzx, (rD), (rA, rB), (), (opcd == 31, xo1 == 23, !_31), (), USER, "Load Word and Zero Indexed",
    (GPR[rD]),
-   (MEM(GPRZ[rA] + GPR[rB], 4)))
+   (MEM(GPRZ[rA] + GPR[rB], 4, uint32_t)))
 INS(lwzux, (rD, rA), (rA, rB), (), (opcd == 31, xo1 == 55, !_31), (rA == 0, rA == rD), USER, "Load Word and Zero with Update Indexed",
    (GPR[rD], GPR[rA]),
-   (MEM(GPR[rA] + GPR[rB], 4)))
+   (MEM(GPR[rA] + GPR[rB], 4, uint32_t)))
 
 // Integer Store
 INS(stb, (), (rS, rA, d), (), (opcd == 38), (), USER, "Store Byte", (), ())
@@ -202,14 +224,30 @@ INS(stwcx, (), (rS, rA, rB), (), (opcd == 31, xo1 == 150, _31), (), SPECIAL, "St
 INS(sync, (), (), (), (opcd == 31, xo1 == 598, !_6_10, !_11_15, !_16_20, !_31), (), SPECIAL, "Synchronise", (), ())
 
 // Floating-Point Load
-INS(lfd, (frD), (rA, d), (), (opcd == 50), (), USER, "Load Floating-Point Double", (), ())
-INS(lfdu, (frD, rA), (rA, d), (), (opcd == 51), (), USER, "Load Floating-Point Double with Update", (), ())
-INS(lfdx, (frD), (rA, rB), (), (opcd == 31, xo1 == 599, !_31), (), USER, "Load Floating-Point Double Indexed", (), ())
-INS(lfdux, (frD, rA), (rA, rB), (), (opcd == 31, xo1 == 631, !_31), (), USER, "Load Floating-Point Double with Update Indexed", (), ())
-INS(lfs, (frD), (rA, d), (), (opcd == 48), (), USER, "Load Floating-Point Single", (), ())
-INS(lfsu, (frD, rA), (rA, d), (), (opcd == 49), (), USER, "Load Floating-Point Single with Update", (), ())
-INS(lfsx, (frD), (rA, rB), (), (opcd == 31, xo1 == 535, !_31), (), USER, "Load Floating-Point Single Indexed", (), ())
-INS(lfsux, (frD, rA), (rA, rB), (), (opcd == 31, xo1 == 567, !_31), (), USER, "Load Floating-Point Single with Update Indexed", (), ())
+INS(lfd, (frD), (rA, d), (), (opcd == 50), (), USER, "Load Floating-Point Double", 
+   (FPR[rD]), 
+   (MEM(GPRZ[rA] + EXTS(d), 1, double)))
+INS(lfdu, (frD, rA), (rA, d), (), (opcd == 51), (rA == 0), USER, "Load Floating-Point Double with Update", 
+   (FPR[rD], GPR[rA]), 
+   (MEM(GPR[rA] + EXTS(d), 1, double)))
+INS(lfdx, (frD), (rA, rB), (), (opcd == 31, xo1 == 599, !_31), (), USER, "Load Floating-Point Double Indexed", 
+   (FPR[rD]),
+   (MEM(GPRZ[rA] + GPR[rB], 1, double)))
+INS(lfdux, (frD, rA), (rA, rB), (), (opcd == 31, xo1 == 631, !_31), (rA == 0), USER, "Load Floating-Point Double with Update Indexed", 
+   (FPR[rD], GPR[rA]),
+   (MEM(GPR[rA] + GPR[rB], 1, double)))
+INS(lfs, (frD), (rA, d), (), (opcd == 48), (), USER, "Load Floating-Point Single", 
+   (PSR[rD]), 
+   (MEM(GPRZ[rA] + EXTS(d), 1, float)))
+INS(lfsu, (frD, rA), (rA, d), (), (opcd == 49), (rA == 0), USER, "Load Floating-Point Single with Update",
+   (PSR[rD], GPR[rA]),
+   (MEM(GPR[rA] + EXTS(d), 1, float)))
+INS(lfsx, (frD), (rA, rB), (), (opcd == 31, xo1 == 535, !_31), (), USER, "Load Floating-Point Single Indexed",
+   (PSR[rD]),
+   (MEM(GPRZ[rA] + GPR[rB], 1, float)))
+INS(lfsux, (frD, rA), (rA, rB), (), (opcd == 31, xo1 == 567, !_31), (rA == 0), USER, "Load Floating-Point Single with Update Indexed",
+   (PSR[rD], GPR[rA]),
+   (MEM(GPR[rA] + GPR[rB], 1, float)))
 
 // Floating-Point Store
 INS(stfd, (), (frS, rA, d), (), (opcd == 54), (), USER, "Store Floating-Point Double", (), ())
@@ -265,12 +303,18 @@ INS(mcrxr, (crfD), (), (), (opcd == 31, xo1 == 512, !_9_10, !_11_15, !_16_20, !_
 INS(mfcr, (rD), (), (), (opcd == 31, xo1 == 19, !_11_15, !_16_20, !_31), (), USER, "Move from Condition Register", 
    (GPR[rD]),
    (CR))
-INS(mfspr, (rD), (spr), (), (opcd == 31, xo1 == 339, !_31), (), USER, "Move from Special Purpose Register", (), ())
-INS(mftb, (rD), (tbr), (), (opcd == 31, xo1 == 371, !_31), (), USER, "Move from Time Base Register", (), ())
+INS(mfspr, (rD), (spr), (), (opcd == 31, xo1 == 339, !_31), (), USER, "Move from Special Purpose Register", 
+   (GPR[rD]), 
+   (SPR[spr]))
+INS(mftb, (rD), (tbr), (), (opcd == 31, xo1 == 371, !_31), (), USER, "Move from Time Base Register", 
+   (GPR[rD]), 
+   (TBR[tbr]))
 INS(mtcrf, (crm), (rS), (), (opcd == 31, xo1 == 144, !_11, !_20, !_31), (), USER, "Move to Condition Register Fields",
    (CR[FIELDMASK(crm)]),
    (GPR[rS]))
-INS(mtspr, (spr), (rS), (), (opcd == 31, xo1 == 467, !_31), (), USER, "Move to Special Purpose Register", (), ())
+INS(mtspr, (spr), (rS), (), (opcd == 31, xo1 == 467, !_31), (), USER, "Move to Special Purpose Register", 
+   (SPR[spr]), 
+   (GPR[rS]))
 
 // Processor Control - Super
 INS(mfmsr, (rD), (), (), (opcd == 31, xo1 == 83, !_11_15, !_16_20, !_31), (), SUPER, "Move from Machine State Register", (), ())
@@ -301,26 +345,14 @@ INS(eciwx, (rD), (rA, rB), (), (opcd == 31, xo1 == 310, !_31), (), SPECIAL, "", 
 INS(ecowx, (rD), (rA, rB), (), (opcd == 31, xo1 == 438, !_31), (), SPECIAL, "", (), ())
 
 // Paired-Single Load and Store
-INS(psq_l, (frD), (rA, qd), (w, i), (opcd == 56), (), USER, "Paired Single Load",
-   (PSR[rD]),
-   (w.eq(0, GQR[i].MEM(GPRZ[rA] + EXTS(qd), 2)),
-      w.eq(1, GQR[i].MEM(GPRZ[rA] + EXTS(qd), 1))))
-INS(psq_lu, (frD), (rA, qd), (w, i), (opcd == 57), (rA == 0), USER, "Paired Single Load with Update",
-   (PSR[rD], GPR[rA]),
-   (w.eq(0, GQR[i].MEM(GPR[rA] + EXTS(qd), 2)),
-      w.eq(1, GQR[i].MEM(GPR[rA] + EXTS(qd), 1))))
-INS(psq_lx, (frD), (rA, rB), (qw, qi), (opcd == 4, xo3 == 6, !_31), (), USER, "Paired Single Load Indexed",
-   (PSR[rD]),
-   (w.eq(0, GQR[i].MEM(GPRZ[rA] + GPR[rB], 2)),
-      w.eq(1, GQR[i].MEM(GPRZ[rA] + GPR[rB], 1))))
-INS(psq_lux, (frD), (rA, rB), (qw, qi), (opcd == 4, xo3 == 38, !_31), (rA == 0), USER, "Paired Single Load with Update Indexed",
-   (PSR[rD], GPR[rA]),
-   (w.eq(0, GQR[i].MEM(GPR[rA] + GPR[rB], 2)),
-      w.eq(1, GQR[i].MEM(GPR[rA] + GPR[rB], 1))))
-INS(psq_st, (frD), (rA, qd), (w, i), (opcd == 60), (), USER, "Paired Single Store", (), ())
-INS(psq_stu, (frD), (rA, qd), (w, i), (opcd == 61), (), USER, "Paired Single Store with Update", (), ())
-INS(psq_stx, (frS), (rA, rB), (qw, qi), (opcd == 4, xo3 == 7, !_31), (), USER, "Paired Single Store Indexed", (), ())
-INS(psq_stux, (frS), (rA, rB), (qw, qi), (opcd == 4, xo3 == 39, !_31), (), USER, "Paired Single Store with Update Indexed", (), ())
+INS(psq_l, (frD), (rA, qd), (w, i), (opcd == 56), (), SPECIAL, "Paired Single Load", (), ())
+INS(psq_lu, (frD), (rA, qd), (w, i), (opcd == 57), (rA == 0), SPECIAL, "Paired Single Load with Update", (), ())
+INS(psq_lx, (frD), (rA, rB), (qw, qi), (opcd == 4, xo3 == 6, !_31), (), SPECIAL, "Paired Single Load Indexed", (), ())
+INS(psq_lux, (frD), (rA, rB), (qw, qi), (opcd == 4, xo3 == 38, !_31), (rA == 0), SPECIAL, "Paired Single Load with Update Indexed", (), ())
+INS(psq_st, (frD), (rA, qd), (w, i), (opcd == 60), (), SPECIAL, "Paired Single Store", (), ())
+INS(psq_stu, (frD), (rA, qd), (w, i), (opcd == 61), (), SPECIAL, "Paired Single Store with Update", (), ())
+INS(psq_stx, (frS), (rA, rB), (qw, qi), (opcd == 4, xo3 == 7, !_31), (), SPECIAL, "Paired Single Store Indexed", (), ())
+INS(psq_stux, (frS), (rA, rB), (qw, qi), (opcd == 4, xo3 == 39, !_31), (), SPECIAL, "Paired Single Store with Update Indexed", (), ())
 
 // Paired-Single Floating Point Arithmetic
 INS(ps_add, (frD), (frA, frB), (Rc), (opcd == 4, xo4 == 21, !_21_25), (), USER, "Paired Single Add",

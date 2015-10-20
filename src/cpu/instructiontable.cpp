@@ -422,6 +422,8 @@ operator==(const OpFieldIndex &lhs, const int &rhs)
 enum class TargetType {
    StateFlag,
    MaskedStateField,
+   TBR,
+   SPR,
    GPR,
    FPR,
    GQR,
@@ -468,7 +470,7 @@ struct EffectInfo
          Field field2;
          uint32_t size;
       };
-      struct { // GPR, FPR
+      struct { // GPR, FPR, SPR, TBR
          Field index;
       };
       struct { // StateFlag
@@ -550,7 +552,7 @@ GPRArithmetic operator+(const GPRRef& lhs, const GPRRef& rhs) {
    return GPRArithmetic(lhs, rhs);
 }
 
-EffectList MEM(const GPRArithmetic& target, uint32_t size) {
+EffectList _MEMMake(const GPRArithmetic& target, uint32_t size) {
    EffectInfo info;
    if (target.rightField.id == Field::Invalid) {
       info.type = TargetType::MEM_GPR_PLUS_GPR;
@@ -565,6 +567,42 @@ EffectList MEM(const GPRArithmetic& target, uint32_t size) {
    }
    return{ info };
 }
+
+template <typename T>
+struct MEMMake {
+};
+template<>
+struct MEMMake<uint8_t> {
+   static EffectList make(const GPRArithmetic& target, uint32_t count) {
+      return _MEMMake(target, sizeof(uint8_t) * count);
+   }
+};
+template<>
+struct MEMMake<uint16_t> {
+   static EffectList make(const GPRArithmetic& target, uint32_t count) {
+      return _MEMMake(target, sizeof(uint16_t) * count);
+   }
+};
+template<>
+struct MEMMake<uint32_t> {
+   static EffectList make(const GPRArithmetic& target, uint32_t count) {
+      return _MEMMake(target, sizeof(uint32_t) * count);
+   }
+};
+template<>
+struct MEMMake<float> {
+   static EffectList make(const GPRArithmetic& target, uint32_t count) {
+      return _MEMMake(target, sizeof(float) * count);
+   }
+};
+template<>
+struct MEMMake<double> {
+   static EffectList make(const GPRArithmetic& target, uint32_t count) {
+      return _MEMMake(target, sizeof(double) * count);
+   }
+};
+
+#define MEM(target, count, type) MEMMake<type>::make(target, count)
 
 FieldIndex EXTS(const FieldIndex& field) {
    // For now, all fields are assumed to be signed extended for this purpose
@@ -581,6 +619,24 @@ struct {
       return GPRRef(lhs);
    }
 } GPRZ;
+
+struct {
+   EffectList operator[](const FieldIndex& lhs) {
+      EffectInfo info;
+      info.type = TargetType::SPR;
+      info.index = lhs.id;
+      return { info };
+   }
+} SPR;
+
+struct {
+   EffectList operator[](const FieldIndex& lhs) {
+      EffectInfo info;
+      info.type = TargetType::TBR;
+      info.index = lhs.id;
+      return{ info };
+   }
+} TBR;
 
 struct FieldMask {
    FieldMask(const FieldIndex& _field) : field(_field) { }
@@ -650,31 +706,11 @@ struct GQRRef {
    GQRRef(FieldIndex _field) : field(_field) { }
    FieldIndex field;
 
-   EffectInfo effectInfo() const {
+   operator EffectList() const {
       EffectInfo info;
       info.type = TargetType::GQR;
       info.index = field.id;
-      return info ;
-   }
-
-   operator EffectList() const {
-      return { effectInfo() };
-   }
-
-   EffectList MEM(const GPRArithmetic& target, uint32_t size) const {
-      EffectInfo info;
-      if (target.rightField.id == Field::Invalid) {
-         info.type = TargetType::GQRMEM_GPR_PLUS_GPR;
-         info.field1 = target.left.field;
-         info.field2 = target.right.field;
-         info.size = size; // number of paired singles to load (1 or 2)
-      } else {
-         info.type = TargetType::GQRMEM_GPR_PLUS_SIMM;
-         info.field1 = target.left.field;
-         info.field2 = target.rightField;
-         info.size = size; // number of paired singles to load (1 or 2)
-      }
-      return { effectInfo(), info };
+      return{ info };
    }
 
 };
