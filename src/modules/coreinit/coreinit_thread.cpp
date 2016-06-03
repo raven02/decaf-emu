@@ -702,7 +702,7 @@ SleepAlarmHandler(OSAlarm *alarm, OSContext *context)
 {
    // Wakeup the thread waiting on this alarm
    auto data = reinterpret_cast<OSThread*>(OSGetAlarmUserData(alarm));
-   
+
    // System Alarm, we already have the scheduler lock
    internal::wakeupOneThreadNoLock(data);
 }
@@ -716,7 +716,7 @@ OSSleepTicks(OSTime ticks)
    // Create an alarm to trigger wakeup
    ppcutils::StackObject<OSAlarm> alarm;
    ppcutils::StackObject<OSThreadQueue> queue;
-   
+
    OSCreateAlarm(alarm);
    OSInitThreadQueue(queue);
 

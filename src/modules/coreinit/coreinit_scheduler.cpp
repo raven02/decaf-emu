@@ -5,6 +5,7 @@
 #include "coreinit_scheduler.h"
 #include "coreinit_event.h"
 #include "coreinit_memheap.h"
+#include "coreinit_mutex.h"
 #include "coreinit_thread.h"
 #include "coreinit_internal_queue.h"
 #include "kernel/kernel.h"
@@ -216,6 +217,41 @@ void checkRunningThreadNoLock(bool yielding)
    // Switch thread
    sCurrentThread[coreId] = next;
    kernel::switchThread(thread, next);
+}
+
+uint32_t
+getEffectivePriorityNoLock(OSThread *thread)
+{
+   assert(isSchedulerLocked());
+   auto priority = thread->basePriority;
+
+   // TODO: Find which spinlock modifies spinLockCount
+   if (thread->context.spinLockCount > 0) {
+      // Spin lock has highest priority
+      return 0;
+   }
+
+   // For all mutex we own, boost our priority over anyone waiting to own our mutex
+   for (auto mutex = thread->mutexQueue.head; mutex; mutex = mutex->link.next) {
+      // We only need to check the head of mutex thread queue as it is in priority order
+      auto other = mutex->queue.head;
+
+      if (other->priority < priority) {
+         priority = other->priority;
+      }
+   }
+
+   // TODO: Owned Fast Mutex queue
+   return priority;
+}
+
+void
+setEffectivePriority(OSThread *thread, uint32_t priorty)
+{
+   // We must adjust position in thread->quee
+   thread->queue;
+   thread->link.prev;
+   thread->link.next;
 }
 
 void
